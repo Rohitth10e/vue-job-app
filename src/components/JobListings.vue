@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import JobListing from "./JobListing.vue";
 import { RouterLink } from "vue-router";
+import { PulseLoader } from 'vue3-spinner';
 import axios from "axios";
 
 const jobs = ref([]);
@@ -50,7 +51,9 @@ onMounted(async()=>{
         Browse Jobs
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div v-if="isLoading">Loading.....</div>
+        <div v-if="isLoading" class="text-gray-500 text-center">
+          <PulseLoader />
+        </div>
         <div v-else-if="errorMsg">{{ errorMsg }}</div>
         <JobListing
           v-else

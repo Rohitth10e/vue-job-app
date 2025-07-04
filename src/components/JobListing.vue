@@ -19,6 +19,7 @@ const descToggle = () => {
 </script>
 
 <template>
+  
   <div class="bg-white rounded-xl shadow-md relative">
     <div class="p-4">
       <div class="mb-6">
@@ -44,7 +45,7 @@ const descToggle = () => {
           {{ job.location }}
         </div>
         <a
-          :href="'/job/' + job.id"
+          :href="'/jobs/' + job.id"
           class="h-[36px] bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-center text-sm"
         >
           Read More
