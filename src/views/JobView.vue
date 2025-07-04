@@ -2,7 +2,8 @@
 import { PulseLoader } from "vue3-spinner";
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute,RouterLink } from "vue-router";
+import BackButtonView from "./BackButtonView.vue";
 
 const route = useRoute();
 const jobId = route.params.id;
@@ -13,7 +14,7 @@ const errorMsg = ref('');
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://localhost:5000/jobs/${jobId}`);
+    const response = await axios.get(`/api/jobs/${jobId}`);
     console.log(response.data);
     job.value = response.data;
     console.log(job.value);
@@ -28,6 +29,7 @@ onMounted(async () => {
 
 <template>
   <section class="bg-green-50">
+    <BackButtonView />
     <div class="container m-auto py-10 px-6">
       <div class="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
         <main>
@@ -106,10 +108,10 @@ onMounted(async () => {
           <!-- Manage -->
           <div class="bg-white p-6 rounded-lg shadow-md mt-6">
             <h3 class="text-xl font-bold mb-6">Manage Job</h3>
-            <a
-              href="add-job.html"
+            <RouterLink
+              :to="`/edit/${job.id}`"
               class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-              >Edit Job</a
+              >Edit Job</RouterLink
             >
             <button
               class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
