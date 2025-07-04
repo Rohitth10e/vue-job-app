@@ -1,10 +1,23 @@
 <script setup>
-import jobData from "./../jobs.json";
-import { ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import JobListing from "./JobListing.vue";
 import { RouterLink } from "vue-router";
+import axios from "axios";
 
-const jobs = ref(jobData.jobs);
+const jobs = ref([]);
+
+// const state = reactive({
+//   jobs:[],
+//   isLoading:true,
+//   errorMsg:''
+// })
+
+// state.jobs = response.data
+// state.isLoading = false
+// state.errorMsg = err.message
+
+const isLoading = ref(true);
+const errorMsg = ref('');
 
 defineProps({
   limit: Number,
@@ -13,6 +26,21 @@ defineProps({
     default: false,
   },
 });
+
+
+onMounted(async()=>{
+  try {
+    const response = await axios.get("http://localhost:5000/jobs");
+    console.log(response.data);
+    jobs.value = response.data;
+  } catch (err) {
+    console.log('error fetching data: ', err.message)
+    errorMsg.value = err.message;
+  } finally{
+    isLoading.value = false;
+  }
+})
+
 </script>
 
 <template>
@@ -22,8 +50,11 @@ defineProps({
         Browse Jobs
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div v-if="isLoading">Loading.....</div>
+        <div v-else-if="errorMsg">{{ errorMsg }}</div>
         <JobListing
-          v-for="job in jobs.slice(0, limit) || jobs.length"
+          v-else
+          v-for="job in limit ? jobs.slice(0, limit) : jobs"
           :key="job.id"
           :job="job"
         />
